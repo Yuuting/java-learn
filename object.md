@@ -18,7 +18,7 @@ JDK类库的根类：Object
     int hashCode()	// 获取对象哈希值的一个方法。
     boolean equals(Object obj)  // 判断两个对象是否相等
     String toString()  // 将对象转换成字符串形式
-    protected void finalize()  // 垃圾回收器负责调用的方法
+    protected void finalize()  // 垃圾回收器负责调用的方法，java8后已经无这一方法。
 
 2.3、toString()方法
   以后所有类的toString()方法是需要重写的。
@@ -45,3 +45,30 @@ JDK类库的根类：Object
 2.5、finalize()方法。
   这个方法是protected修饰的，在Object类中这个方法的源代码是？
     protected void finalize() throws Throwable { }
+
+```java
+class MyTime{
+	int year;
+	int month;
+	int day;
+
+	public MyTime(){
+	
+	}
+
+	public MyTime(int year, int month, int day){
+		this.year = year;
+		this.month = month;
+		this.day = day;
+	}
+
+	// 重写toString()方法
+	// 这个toString()方法怎么重写呢？
+	// 越简洁越好，可读性越强越好。
+	// 向简洁的、详实的、易阅读的方向发展
+	public String toString(){
+		//return this.year + "年" + this.month + "月" + this.day + "日";
+		return this.year + "/" + this.month + "/" + this.day;
+	}
+}
+```
