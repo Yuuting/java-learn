@@ -185,3 +185,42 @@ class Customer {
     }
 }
 ```
+# StringBuffer、StringBuilder
+1、我们在实际的开发中，如果需要进行字符串的频繁拼接，会有什么问题？
+
+因为java中的字符串是不可变的，每一次拼接都会产生新字符串。这样会占用大量的方法区内存。造成内存空间的浪费。
+
+String s = "abc";
+
+s += "hello";
+
+就以上两行代码，就导致在方法区字符串常量池当中创建了3个对象。
+
+2、如果以后需要进行大量字符串的拼接操作，建议使用JDK中自带的：
+
+java.lang.StringBuffer
+java.lang.StringBuilder
+
+如何优化StringBuffer的性能？
+在创建StringBuffer的时候尽可能给定一个初始化容量。最好减少底层数组的扩容次数。预估计一下，给一个大一些初始化容量。
+
+关键点：给一个合适的初始化容量。可以提高程序的执行效率。
+
+3、StringBuffer和StringBuilder的区别？
+StringBuffer中的方法都有：synchronized关键字修饰。表示StringBuffer在多线程环境下运行是安全的。
+StringBuilder中的方法都没有：synchronized关键字修饰，表示StringBuilder在多线程环境下运行是不安全的。
+
+StringBuffer是线程安全的。
+StringBuilder是非线程安全的。
+
+4、面试题：String为什么是不可变的？
+
+我看过源代码，String类中有一个byte[]数组，这个byte[]数组采用了final修饰，因为数组一旦创建长度不可变。并且被final修饰的引用一旦指向某个对象之后，不可再指向其它对象，所以String是不可变的！"abc" 无法变成 "abcd"
+
+StringBuilder/StringBuffer为什么是可变的呢？
+
+我看过源代码，StringBuffer/StringBuilder内部实际上是一个byte[]数组，
+这个byte[]数组没有被final修饰，StringBuffer/StringBuilder的初始化
+容量我记得应该是16，当存满之后会进行扩容，底层调用了数组拷贝的方法
+System.arraycopy()...是这样扩容的。所以StringBuilder/StringBuffer
+适合于使用字符串的频繁拼接操作。
