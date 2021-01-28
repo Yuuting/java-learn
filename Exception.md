@@ -111,3 +111,141 @@ try..catch捕捉异常之后，后续代码可以执行。
 
 2、finally语句通常使用在哪些情况下呢？
 通常在finally语句块中完成资源的释放/关闭。因为finally中的代码比较有保障。即使try语句块中的代码出现异常，finally中代码也会正常执行。
+
+7、特例
+```java
+/*
+finally面试题
+ */
+public class ExceptionTest13 {
+    public static void main(String[] args) {
+        int result = m();
+        System.out.println(result); //100
+    }
+
+    /*
+    java语法规则（有一些规则是不能破坏的，一旦这么说了，就必须这么做！）：
+        java中有一条这样的规则：
+            方法体中的代码必须遵循自上而下顺序依次逐行执行（亘古不变的语法！）
+        java中海油一条语法规则：
+            return语句一旦执行，整个方法必须结束（亘古不变的语法！）
+     */
+    public static int m(){
+        int i = 100;
+        try {
+            // 这行代码出现在int i = 100;的下面，所以最终结果必须是返回100
+            // return语句还必须保证是最后执行的。一旦执行，整个方法结束。
+            return i;
+        } finally {
+            i++;
+        }
+    }
+}
+
+/*
+反编译之后的效果
+public static int m(){
+    int i = 100;
+    int j = i;
+    i++;
+    return j;
+}
+ */
+ ```
+8、final finally finalize有什么区别？
+
+final 关键字
+
+final修饰的类无法继承，final修饰的方法无法覆盖，final修饰的变量不能重新赋值。
+
+finally 关键字
+
+和try一起联合使用。finally语句块中的代码是必须执行的。
+
+finalize 标识符
+
+是一个Object类中的方法名。这个方法是由垃圾回收器GC负责调用的。
+
+9、自定义异常：
+
+9.1、SUN提供的JDK内置的异常肯定是不够的用的。在实际的开发中，有很多业务，这些业务出现异常之后，JDK中都是没有的。和业务挂钩的。那么异常类我们程序员可以自己定义吗？
+    
+可以。
+
+9.2、Java中怎么自定义异常呢？
+
+两步：
+
+第一步：编写一个类继承Exception或者RuntimeException.
+
+第二步：提供两个构造方法，一个无参数的，一个带有String参数的。
+```java
+*/
+public class MyException extends Exception{ // 编译时异常
+    public MyException(){
+
+    }
+    public MyException(String s){
+        super(s);
+    }
+}
+
+/*
+public class MyException extends RuntimeException{ // 运行时异常
+
+}
+```
+10、异常在开发中的作用：见栈改良程序
+
+11、之前在讲解方法覆盖的时候，当时遗留了一个问题？
+
+重写之后的方法不能比重写之前的方法抛出更多（更宽泛）的异常，可以更少。
+```java
+class Animal {
+    public void doSome(){
+
+    }
+
+    public void doOther() throws Exception{
+
+    }
+}
+
+class Cat extends Animal {
+
+    // 编译正常。
+    public void doSome() throws RuntimeException{
+
+    }
+
+    // 编译报错。
+    /*public void doSome() throws Exception{
+
+    }*/
+
+    // 编译正常。
+    /*public void doOther() {
+
+    }*/
+
+    // 编译正常。
+    /*public void doOther() throws Exception{
+
+    }*/
+
+    // 编译正常。
+    public void doOther() throws NullPointerException{
+
+    }
+}
+
+/*
+总结异常中的关键字：
+    异常捕捉：
+        try
+        catch
+        finally
+
+    throws 在方法声明位置上使用，表示上报异常信息给调用者。
+    throw 手动抛出异常！
+```
