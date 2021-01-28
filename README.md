@@ -8,4 +8,4 @@ java学习的一些笔记
 | [数组](https://github.com/Yuuting/java-learn/blob/main/%E6%95%B0%E7%BB%84.md)         | 1.25     | 一维数组、二维数组           |
 | [冒泡、选择排序、二分查找](https://github.com/Yuuting/java-learn/blob/main/%E6%95%B0%E7%BB%84%E6%8E%92%E5%BA%8F%E6%9F%A5%E6%89%BE.md)         | 1.26     | 代码实现        |
 | [String相关](https://github.com/Yuuting/java-learn/blob/main/String.md)         | 1.27     | 代码实现        |
-| [常用类](https://github.com/Yuuting/java-learn/blob/main/String.md)         | 1.28     | Integer、日期、高精度数字、随机数、枚举        |
+| [常用类](https://github.com/Yuuting/java-learn/blob/main/%E5%B8%B8%E7%94%A8%E7%B1%BB.md)         | 1.28     | Integer、日期、高精度数字、随机数、枚举        |
