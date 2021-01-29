@@ -10,3 +10,4 @@ java学习的一些笔记
 | [String相关](https://github.com/Yuuting/java-learn/blob/main/String.md)         | 1.27     | 代码实现        |
 | [常用类](https://github.com/Yuuting/java-learn/blob/main/%E5%B8%B8%E7%94%A8%E7%B1%BB.md)         | 1.28     | Integer、日期、高精度数字、随机数、枚举        |
 | [异常](https://github.com/Yuuting/java-learn/blob/main/Exception.md)         | 1.28     | 异常、finally        |
+| [集合](https://github.com/Yuuting/java-learn/blob/main/collection.md)         | 1.29     | 集合相关        |
