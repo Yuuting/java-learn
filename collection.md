@@ -71,3 +71,91 @@ contains方法是用来判断集合中是否包含某个元素的方法，那么
             it2.remove(); // 删除的一定是迭代器指向的当前元素。
             System.out.println(o);
 ```
+## List
+### ArrayList
+
+1.测试List接口中常用方法
+
+List集合存储元素特点：有序可重复
+
+有序：List集合中的元素有下标。从0开始，以1递增。
+
+可重复：存储一个1，还可以再存储1.
+
+2、List既然是Collection接口的子接口，那么肯定List接口有自己“特色”的方法：以下只列出List接口特有的常用的方法：
+```java
+            void add(int index, Object element)
+            Object set(int index, Object element)
+            Object get(int index)
+            int indexOf(Object o)
+            int lastIndexOf(Object o)
+            Object remove(int index)
+```
+3、增删改查这几个单词要知道：
+
+增：add、save、new
+
+删：delete、drop、remove
+
+改：update、set、modify
+
+查：find、get、query、select
+
+4、集合ArrayList的构造方法
+```java
+        // 默认初始化容量10
+        List myList1 = new ArrayList();
+
+        // 指定初始化容量100
+        List myList2 = new ArrayList(100);
+
+        // 创建一个HashSet集合
+        Collection c = new HashSet();
+        // 添加元素到Set集合
+        c.add(100);
+        c.add(200);
+        c.add(900);
+        c.add(50);
+
+        // 通过这个构造方法就可以将HashSet集合转换成List集合。
+        List myList3 = new ArrayList(c);
+        for(int i = 0; i < myList3.size(); i++){
+            System.out.println(myList3.get(i));
+```
+5、ArrayList集合：
+
+5.1、默认初始化容量10（底层先创建了一个长度为0的数组，当添加第一个元素的时候，初始化容量10。）
+
+5.2、集合底层是一个Object[]数组。
+
+5.3、构造方法：
+
+new ArrayList();
+new ArrayList(20);
+
+5.4、ArrayList集合的扩容：
+增长到原容量的1.5倍。
+
+ArrayList集合底层是数组，怎么优化？
+
+尽可能少的扩容。因为数组扩容效率比较低，建议在使用ArrayList集合的时候预估计元素的个数，给定一个初始化容量。
+
+5.5、数组优点：
+
+检索效率比较高。（每个元素占用空间大小相同，内存地址是连续的，知道首元素内存地址，然后知道下标，通过数学表达式计算出元素的内存地址，所以检索效率最高。）
+
+5.6、数组缺点：
+
+随机增删元素效率比较低。
+
+另外数组无法存储大数据量。（很难找到一块非常巨大的连续的内存空间。）
+
+5.7、向数组末尾添加元素，效率很高，不受影响。
+
+5.8、面试官经常问的一个问题？
+
+这么多的集合中，你用哪个集合最多？
+
+答：ArrayList集合。因为往数组末尾添加元素，效率不受影响。另外，我们检索/查找某个元素的操作比较多。
+
+5.9、ArrayList集合是非线程安全的。（不是线程安全的集合。）
