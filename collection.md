@@ -1,3 +1,5 @@
+[TOC]
+
 # 集合
 
 1.集合继承结构图
@@ -182,6 +184,7 @@ LinkedList：把随机增删发挥到极致。
 ![单向链表](/src/05-集合/005-链表（单向链表）.png)
 ![双向链表](/src/05-集合/006-双向链表.png)
 
+
 ### Vector
 
 1、底层也是一个数组。
@@ -211,3 +214,7 @@ List myList = new ArrayList(); // 非线程安全的。
 变成线程安全的
 
 Collections.synchronizedList(myList);
+
+## Set
+### hashSet
+### TreeSet
