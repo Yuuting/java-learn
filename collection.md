@@ -260,12 +260,103 @@ Collections.synchronizedList(myList);
             System.out.println(s);
 ```
 ### TreeSet
-TreeSet集合存储元素特点：
+1、TreeSet集合存储元素特点：
 
-1、无序不可重复的，但是存储的元素可以自动按照大小顺序排序！称为：可排序集合。
+1.1、无序不可重复的，但是存储的元素可以自动按照大小顺序排序！称为：可排序集合。
 
-2、无序：这里的无序指的是存进去的顺序和取出来的顺序不同。并且没有下标。
+1.2、无序：这里的无序指的是存进去的顺序和取出来的顺序不同。并且没有下标。
 
+2、TreeSet集合底层实际上是一个TreeMap
+
+TreeMap集合底层是一个二叉树。放到TreeSet集合中的元素，等同于放到TreeMap集合key部分了。
+
+3、放在TreeSet集合中的元素需要实现java.lang.Comparable接口。
+
+并且实现compareTo方法。equals可以不写。
+```java
+class Customer implements Comparable<Customer>{
+
+    int age;
+    public Customer(int age){
+        this.age = age;
+    }
+
+    // 需要在这个方法中编写比较的逻辑，或者说比较的规则，按照什么进行比较！
+    // k.compareTo(t.key)
+    // 拿着参数k和集合中的每一个k进行比较，返回值可能是>0 <0 =0
+    // 比较规则最终还是由程序员指定的：例如按照年龄升序。或者按照年龄降序。
+    @Override
+    public int compareTo(Customer c) { // c1.compareTo(c2);
+        /*int age1 = this.age;
+        int age2 = c.age;
+        if(age1 == age2){
+            return 0;
+        } else if(age1 > age2) {
+            return 1;
+        } else {
+            return -1;
+        }*/
+        //return this.age - c.age; // =0 >0 <0
+        return c.age - this.age;
+    }
+
+    public String toString(){
+        return "Customer[age="+age+"]";
+```
+4、重写
+```java
+     /*
+    compareTo方法的返回值很重要：
+        返回0表示相同，value会覆盖。
+        返回>0，会继续在右子树上找。【10 - 9 = 1 ，1 > 0的说明左边这个数字比较大。所以在右子树上找。】
+        返回<0，会继续在左子树上找。
+     */
+    @Override
+    public int compareTo(Vip v) {
+        // 写排序规则，按照什么进行比较。
+        if(this.age == v.age){
+            // 年龄相同时按照名字排序。
+            // 姓名是String类型，可以直接比。调用compareTo来完成比较。
+            return this.name.compareTo(v.name);
+        } else {
+            // 年龄不一样
+            return this.age - v.age;
+        }
+    }
+```
+5、比较的第二种方法
+
+TreeSet集合中元素可排序的第二种方式：使用比较器的方式。
+
+最终的结论：
+
+放到TreeSet或者TreeMap集合key部分的元素要想做到排序,包括两种方式：
+
+第一种：放在集合中的元素实现java.lang.Comparable接口。
+
+第二种：在构造TreeSet或者TreeMap集合的时候给它传一个比较器对象。
+
+Comparable和Comparator怎么选择呢？
+
+当比较规则不会发生改变的时候，或者说当比较规则只有1个的时候，建议实现Comparable接口。
+
+如果比较规则有多个，并且需要多个比较规则之间频繁切换，建议使用Comparator接口。
+
+Comparator接口的设计符合OCP原则。
+```java
+// 单独在这里编写一个比较器
+// 比较器实现java.util.Comparator接口。（Comparable是java.lang包下的。Comparator是java.util包下的。）
+/*
+class WuGuiComparator implements Comparator<WuGui> {
+
+    @Override
+    public int compare(WuGui o1, WuGui o2) {
+        // 指定比较规则
+        // 按照年龄排序
+        return o1.age - o2.age;
+    }
+}
+```
 # map
 
 1、java.util.Map接口中常用的方法：
@@ -470,6 +561,9 @@ k.hashCode()方法返回哈希值，哈希值经过哈希算法转换成数组�
 
 14、HashMap集合key部分允许null吗？允许。但是要注意：HashMap集合的key null值只能有一个。
 ## TreeMap
+自平衡二叉树结构
+
+![自平衡二叉树](/src/05-集合/010-自平衡二叉树.png)
 ## HashTable
 1、Hashtable的key可以为null吗？
 
