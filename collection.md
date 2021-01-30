@@ -1,8 +1,12 @@
 # Contents  
 - [集合](#集合)   
   - [List](#List) 
-    - [ArrayList](#ArrayList) 
-
+    - [ArrayList](#ArrayList)
+    - [LinkedList](#LinkedList)
+    - [Vector](#Vector)
+  - [Set](#Set) 
+    - [HashSet](#HashSet)
+    - [TreeSet](#TreeSet)
   
 # 集合
 
@@ -220,5 +224,5 @@ List myList = new ArrayList(); // 非线程安全的。
 Collections.synchronizedList(myList);
 
 ## Set
-### hashSet
+### HashSet
 ### TreeSet
