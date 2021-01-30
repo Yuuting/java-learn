@@ -1,7 +1,7 @@
 # Contents  
 - [集合](#集合)   
   - [List](#List) 
-   - [ArrayList](#ArrayList) 
+  - [ArrayList](#ArrayList) 
 
   
 # 集合
