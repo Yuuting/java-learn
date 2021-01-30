@@ -387,6 +387,7 @@ public class MapTest02 {
 ![哈希表或者散列表数据结构](/src/05-集合/008-哈希表或者散列表数据结构.png)
 
 3、HashMap集合底层的源代码：
+```java
 public class HashMap{
 // HashMap底层实际上就是一个数组。（一维数组）
 Node<K,V>[] table;
@@ -398,35 +399,124 @@ static class Node<K,V> {
     Node<K,V> next; // 下一个节点的内存地址。
 }
 }
+```
+
 哈希表/散列表：一维数组，这个数组中每一个元素是一个单向链表。（数组和链表的结合体。）
+
 4、最主要掌握的是：
+
 map.put(k,v)
+
 v = map.get(k)
+
 以上这两个方法的实现原理，是必须掌握的。
+
 5、HashMap集合的key部分特点：
+
 无序，不可重复。
+
 为什么无序？ 因为不一定挂到哪个单向链表上。
-不可重复是怎么保证的？ equals方法来保证HashMap集合的key不可重复。
-如果key重复了，value会覆盖。
+
+不可重复是怎么保证的？ equals方法来保证HashMap集合的key不可重复。如果key重复了，value会覆盖。
 
 放在HashMap集合key部分的元素其实就是放到HashSet集合中了。
 所以HashSet集合中的元素也需要同时重写hashCode()+equals()方法。
 
 6、哈希表HashMap使用不当时无法发挥性能！
-假设将所有的hashCode()方法返回值固定为某个值，那么会导致底层哈希表变成了
-纯单向链表。这种情况我们成为：散列分布不均匀。
+
+假设将所有的hashCode()方法返回值固定为某个值，那么会导致底层哈希表变成了纯单向链表。这种情况我们成为：散列分布不均匀。
+
 什么是散列分布均匀？
-假设有100个元素，10个单向链表，那么每个单向链表上有10个节点，这是最好的，
-是散列分布均匀的。
+
+假设有100个元素，10个单向链表，那么每个单向链表上有10个节点，这是最好的，是散列分布均匀的。
+
 假设将所有的hashCode()方法返回值都设定为不一样的值，可以吗，有什么问题？
-不行，因为这样的话导致底层哈希表就成为一维数组了，没有链表的概念了。
-也是散列分布不均匀。
+
+不行，因为这样的话导致底层哈希表就成为一维数组了，没有链表的概念了。也是散列分布不均匀。
+
 散列分布均匀需要你重写hashCode()方法时有一定的技巧。
+
 7、重点：放在HashMap集合key部分的元素，以及放在HashSet集合中的元素，需要同时重写hashCode和equals方法。
+
 8、HashMap集合的默认初始化容量是16，默认加载因子是0.75
+
 这个默认加载因子是当HashMap集合底层数组的容量达到75%的时候，数组开始扩容。
 
-重点，记住：HashMap集合初始化容量必须是2的倍数，这也是官方推荐的，
-这是因为达到散列均匀，为了提高HashMap集合的存取效率，所必须的。
+重点，记住：HashMap集合初始化容量必须是2的倍数，这也是官方推荐的，这是因为达到散列均匀，为了提高HashMap集合的存取效率，所必须的。
+
+9、向Map集合中存，以及从Map集合中取，都是先调用key的hashCode方法，然后再调用equals方法！
+
+equals方法有可能调用，也有可能不调用。
+
+拿put(k,v)举例，什么时候equals不会调用？
+
+k.hashCode()方法返回哈希值，哈希值经过哈希算法转换成数组下标。数组下标位置上如果是null，equals不需要执行。
+
+拿get(k)举例，什么时候equals不会调用？
+
+k.hashCode()方法返回哈希值，哈希值经过哈希算法转换成数组下标。数组下标位置上如果是null，equals不需要执行。
+
+10、注意：如果一个类的equals方法重写了，那么hashCode()方法必须重写。并且equals方法返回如果是true，hashCode()方法返回的值必须一样。equals方法返回true表示两个对象相同，在同一个单向链表上比较。那么对于同一个单向链表上的节点来说，他们的哈希值都是相同的。所以hashCode()方法的返回值也应该相同。
+
+11、hashCode()方法和equals()方法不用研究了，直接使用IDEA工具生成，但是这两个方法需要同时生成。
+
+12、终极结论：
+放在HashMap集合key部分的，以及放在HashSet集合中的元素，需要同时重写hashCode方法和equals方法。
+
+13、对于哈希表数据结构来说：
+如果o1和o2的hash值相同，一定是放到同一个单向链表上。
+
+当然如果o1和o2的hash值不同，但由于哈希算法执行结束之后转换的数组下标可能相同，此时会发生“哈希碰撞”。
+
+14、HashMap集合key部分允许null吗？允许。但是要注意：HashMap集合的key null值只能有一个。
 ## TreeMap
 ## HashTable
+1、Hashtable的key可以为null吗？
+
+Hashtable的key和value都是不能为null的。HashMap集合的key和value都是可以为null的。
+
+2、Hashtable方法都带有synchronized：线程安全的。
+
+线程安全有其它的方案，这个Hashtable对线程的处理导致效率较低，使用较少了。
+
+Hashtable和HashMap一样，底层都是哈希表数据结构。
+
+Hashtable的初始化容量是11，默认加载因子是：0.75f
+
+Hashtable的扩容是：原容量 * 2 + 1
+
+3、目前只需要掌握Properties属性类对象的相关方法即可。
+
+Properties是一个Map集合，继承Hashtable，Properties的key和value都是String类型。
+
+Properties被称为属性类对象。
+
+Properties是线程安全的。
+```java
+public class PropertiesTest01 {
+    public static void main(String[] args) {
+
+        // 创建一个Properties对象
+        Properties pro = new Properties();
+
+        // 需要掌握Properties的两个方法，一个存，一个取。
+        pro.setProperty("url", "jdbc:mysql://localhost:3306/bjpowernode");
+        pro.setProperty("driver","com.mysql.jdbc.Driver");
+        pro.setProperty("username", "root");
+        pro.setProperty("password", "123");
+
+        // 通过key获取value
+        String url = pro.getProperty("url");
+        String driver = pro.getProperty("driver");
+        String username = pro.getProperty("username");
+        String password = pro.getProperty("password");
+
+        System.out.println(url);
+        System.out.println(driver);
+        System.out.println(username);
+        System.out.println(password);
+
+    }
+}
+
+```
