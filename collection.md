@@ -230,7 +230,41 @@ Collections.synchronizedList(myList);
 
 ## Set
 ### HashSet
+
+1、HashSet集合：无序不可重复。
+```java
+        // 演示一下HashSet集合特点
+        Set<String> strs = new HashSet<>();
+
+        // 添加元素
+        strs.add("hello3");
+        strs.add("hello4");
+        strs.add("hello1");
+        strs.add("hello2");
+        strs.add("hello3");
+        strs.add("hello3");
+        strs.add("hello3");
+        strs.add("hello3");
+
+        // 遍历
+        /*
+        hello1
+        hello4
+        hello2
+        hello3
+        1、存储时顺序和取出的顺序不同。
+        2、不可重复。
+        3、放到HashSet集合中的元素实际上是放到HashMap集合的key部分了。
+         */
+        for(String s : strs){
+            System.out.println(s);
+```
 ### TreeSet
+TreeSet集合存储元素特点：
+
+1、无序不可重复的，但是存储的元素可以自动按照大小顺序排序！称为：可排序集合。
+
+2、无序：这里的无序指的是存进去的顺序和取出来的顺序不同。并且没有下标。
 
 # map
 ## HashMap
