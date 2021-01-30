@@ -181,3 +181,33 @@ LinkedList：把随机增删发挥到极致。
 
 ![单向链表](/src/05-集合/005-链表（单向链表）.png)
 ![双向链表](/src/05-集合/006-双向链表.png)
+
+### Vector
+
+1、底层也是一个数组。
+
+2、初始化容量：10
+
+3、怎么扩容的？
+扩容之后是原容量的2倍。
+10--> 20 --> 40 --> 80
+
+4、ArrayList集合扩容特点：
+ArrayList集合扩容是原容量1.5倍。
+
+5、Vector中所有的方法都是线程同步的，都带有synchronized关键字，是线程安全的。效率比较低，使用较少了。
+
+6、怎么将一个线程不安全的ArrayList集合转换成线程安全的呢？
+
+使用集合工具类：
+java.util.Collections;
+
+java.util.Collection 是集合接口。
+java.util.Collections 是集合工具类。
+
+7、
+List myList = new ArrayList(); // 非线程安全的。
+
+变成线程安全的
+
+Collections.synchronizedList(myList);
