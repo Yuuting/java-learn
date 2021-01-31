@@ -12,3 +12,4 @@ java学习的一些笔记
 | [异常](https://github.com/Yuuting/java-learn/blob/main/Exception.md)         | 1.28     | 异常、finally        |
 | [集合](https://github.com/Yuuting/java-learn/blob/main/collection.md)         | 1.29     | 集合相关        |
 | [小技巧](https://github.com/Yuuting/java-learn/blob/main/%E5%B0%8F%E6%8A%80%E5%B7%A7.md)         | 1.30     | 泛型、Foreach        |
+| [IO](https://github.com/Yuuting/java-learn/blob/main/IO.md)         | 1.31     | IO相关        |
