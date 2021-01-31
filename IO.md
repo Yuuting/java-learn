@@ -475,12 +475,19 @@ public class PrintStreamTest {
 ```
 ## File
 1、File类和四大家族没有关系，所以File类不能完成文件的读和写。
+
 2、File对象代表什么？
+
 文件和目录路径名的抽象表示形式。
+
 C:\Drivers 这是一个File对象
+
 C:\Drivers\Lan\Realtek\Readme.txt 也是File对象。
+
 一个File对象有可能对应的是目录，也可能是文件。
+
 File只是一个路径名的抽象表示形式。
+
 3、需要掌握File类中常用的方法
 ```java
 public class FileTest01 {
@@ -566,5 +573,251 @@ public class FileTest03 {
 }
 ```
 ## ObjectInputStream
+1、Java 提供了一种对象序列化的机制，该机制中，一个对象可以被表示为一个字节序列，该字节序列包括该对象的数据、有关对象的类型的信息和存储在对象中数据的类型。
 
+将序列化对象写入文件之后，可以从文件中读取出来，并且对它进行反序列化，也就是说，对象的类型信息、对象的数据，还有对象中的数据类型可以用来在内存中新建对象。
+
+整个过程都是 Java 虚拟机（JVM）独立的，也就是说，在一个平台上序列化的对象可以在另一个完全不同的平台上反序列化该对象。
+
+类 ObjectInputStream 和 ObjectOutputStream 是高层次的数据流，它们包含反序列化和序列化对象的方法。
+
+2、
+
+2.1、java.io.NotSerializableException:
+
+Student对象不支持序列化！！！！
+
+2.2、参与序列化和反序列化的对象，必须实现Serializable接口。
+
+2.3、注意：通过源代码发现，Serializable接口只是一个标志接口：
+
+public interface Serializable {
+
+}
+
+这个接口当中什么代码都没有。
+
+那么它起到一个什么作用呢？
+
+起到标识的作用，标志的作用，java虚拟机看到这个类实现了这个接口，可能会对这个类进行特殊待遇。Serializable这个标志接口是给java虚拟机参考的，java虚拟机看到这个接口之后，会为该类自动生成一个序列化版本号。
+
+2.4、序列化版本号有什么用呢？
+
+java.io.InvalidClassException:
+
+com.bjpowernode.java.bean.Student;
+
+local class incompatible:
+
+stream classdesc serialVersionUID = -684255398724514298（十年后）,
+
+local class serialVersionUID = -3463447116624555755（十年前）
+
+
+java语言中是采用什么机制来区分类的？
+
+第一：首先通过类名进行比对，如果类名不一样，肯定不是同一个类。
+
+第二：如果类名一样，再怎么进行类的区别？靠序列化版本号进行区分。
+
+不同的人编写了同一个类，但“这两个类确实不是同一个类”。这个时候序列化版本就起上作用了。
+
+对于java虚拟机来说，java虚拟机是可以区分开这两个类的，因为这两个类都实现了Serializable接口，都有默认的序列化版本号，他们的序列化版本号不一样。所以区分开了。（这是自动生成序列化版本号的好处）
+
+这种自动生成序列化版本号有什么缺陷？
+
+这种自动生成的序列化版本号缺点是：一旦代码确定之后，不能进行后续的修改，因为只要修改，必然会重新编译，此时会生成全新的序列化版本号，这个时候java虚拟机会认为这是一个全新的类。（这样就不好了！）
+
+最终结论：
+
+凡是一个类实现了Serializable接口，建议给该类提供一个固定不变的序列化版本号。这样，以后这个类即使代码修改了，但是版本号不变，java虚拟机会认为是同一个类。
+
+```java
+/*
+反序列化
+ */
+public class ObjectInputStreamTest01 {
+    public static void main(String[] args) throws Exception{
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("students"));
+        // 开始反序列化，读
+        Object obj = ois.readObject();
+        // 反序列化回来是一个学生对象，所以会调用学生对象的toString方法。
+        System.out.println(obj);
+        ois.close();
+    }
+}
+```
+```java
+
+/*
+反序列化集合
+ */
+public class ObjectInputStreamTest02 {
+    public static void main(String[] args) throws Exception{
+        ObjectInputStream ois = new ObjectInputStream(new FileInputStream("users"));
+        //Object obj = ois.readObject();
+        //System.out.println(obj instanceof List);
+        List<User> userList = (List<User>)ois.readObject();
+        for(User user : userList){
+            System.out.println(user);
+        }
+        ois.close();
+    }
+}
+
+```
 ## ObjectOutputStream
+```java
+public class ObjectOutputStreamTest01 {
+    public static void main(String[] args) throws Exception{
+        // 创建java对象
+        Student s = new Student(1111, "zhangsan");
+        // 序列化
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("students"));
+
+        // 序列化对象
+        oos.writeObject(s);
+
+        // 刷新
+        oos.flush();
+        // 关闭
+        oos.close();
+    }
+}
+```
+```java
+/*
+一次序列化多个对象呢？
+    可以，可以将对象放到集合当中，序列化集合。
+提示：
+    参与序列化的ArrayList集合以及集合中的元素User都需要实现 java.io.Serializable接口。
+ */
+public class ObjectOutputStreamTest02 {
+    public static void main(String[] args) throws Exception{
+        List<User> userList = new ArrayList<>();
+        userList.add(new User(1,"zhangsan"));
+        userList.add(new User(2, "lisi"));
+        userList.add(new User(3, "wangwu"));
+        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users"));
+
+        // 序列化一个集合，这个集合对象中放了很多其他对象。
+        oos.writeObject(userList);
+
+        oos.flush();
+        oos.close();
+    }
+}
+```
+students.java
+```java
+package com.bjpowernode.java.bean;
+
+import java.io.Serializable;
+
+public class Student implements Serializable {
+
+    // IDEA工具自动生成序列化版本号。
+    //private static final long serialVersionUID = -7998917368642754840L;
+
+    // Java虚拟机看到Serializable接口之后，会自动生成一个序列化版本号。
+    // 这里没有手动写出来，java虚拟机会默认提供这个序列化版本号。
+    // 建议将序列化版本号手动的写出来。不建议自动生成
+    private static final long serialVersionUID = 1L; // java虚拟机识别一个类的时候先通过类名，如果类名一致，再通过序列化版本号。
+
+    private int no;
+    //private String name;
+
+    // 过了很久，Student这个类源代码改动了。
+    // 源代码改动之后，需要重新编译，编译之后生成了全新的字节码文件。
+    // 并且class文件再次运行的时候，java虚拟机生成的序列化版本号也会发生相应的改变。
+    private int age;
+    private String email;
+    private String address;
+
+    public Student() {
+    }
+
+    public Student(int no, String name) {
+        this.no = no;
+        //this.name = name;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    /*public String getName() {
+        return name;
+    }*/
+
+    /*public void setName(String name) {
+        this.name = name;
+    }*/
+
+    /*@Override
+    public String toString() {
+        return "Student{" +
+                "no=" + no +
+                ", name='" + name + '\'' +
+                '}';
+    }*/
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "no=" + no +
+                ", age=" + age +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
+}
+```
+user.java
+```java
+package com.bjpowernode.java.bean;
+
+import java.io.Serializable;
+
+public class User implements Serializable {
+    private int no;
+    // transient关键字表示游离的，不参与序列化。
+    private transient String name; // name不参与序列化操作！
+
+    public User() {
+    }
+
+    public User(int no, String name) {
+        this.no = no;
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "no=" + no +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+```
