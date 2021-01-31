@@ -1,16 +1,16 @@
 # Contents  
 - [IO](#IO)   
-  - [java.io.FileInputStream](#java.io.FileInputStream) 
-  - [java.io.FileOutputStream](#java.io.FileOutputStream) 
+  - [FileInputStream](#FileInputStream) 
+  - [FileOutputStream](#FileOutputStream) 
   - [FileReader](#FileReader) 
   - [FileWriter](#FileWriter)
   - [BufferedReader](#BufferedReader)
   - [BufferedWriter](#BufferedWriter)
   - [DataInputStream](#DataInputStream)
   - [DataOutputStream](#DataOutputStream)
-  - [java.io.PrintStream](#java.io.PrintStream)
-  - [java.io.ObjectInputStream](#java.io.ObjectInputStream)
-  - [java.io.ObjectOutputStream](#java.io.ObjectOutputStream)
+  - [PrintStream](#PrintStream)
+  - [ObjectInputStream](#ObjectInputStream)
+  - [ObjectOutputStream](#ObjectOutputStream)
   
 # IO
 1、IO流，什么是IO？
@@ -110,7 +110,7 @@ java.io.Flushable接口，都是可刷新的，都有flush()方法。养成一�
 	对象专属流：
 		java.io.ObjectInputStream（掌握）
 		java.io.ObjectOutputStream（掌握）
-## java.io.FileInputStream
+## FileInputStream
 
 1、文件字节输入流，万能的，任何类型的文件都可以采用这个流来读。
 
@@ -173,7 +173,7 @@ System.out.println(new String(bytes)); // abcdef
 fis.skip(3);
 System.out.println(fis.read());
 ```
-## java.io.FileOutputStream
+## FileOutputStream
 
 1、 文件字节输出流，负责写。从内存到硬盘。
 ```java
@@ -434,7 +434,7 @@ public class DataInputStreamTest01 {
     }
 }
 ```
-## java.io.PrintStream
+## PrintStream
 标准的字节输出流。默认输出到控制台。
 ```java
 public class PrintStreamTest {
@@ -472,6 +472,6 @@ public class PrintStreamTest {
     }
 }
 ```
-## java.io.ObjectInputStream
+## ObjectInputStream
 
-## java.io.ObjectOutputStream
+## ObjectOutputStream
