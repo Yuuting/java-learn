@@ -9,6 +9,7 @@
   - [DataInputStream](#DataInputStream)
   - [DataOutputStream](#DataOutputStream)
   - [PrintStream](#PrintStream)
+  - [File](#File)
   - [ObjectInputStream](#ObjectInputStream)
   - [ObjectOutputStream](#ObjectOutputStream)
   
@@ -469,6 +470,98 @@ public class PrintStreamTest {
         System.out.println("hello kitty");
         System.out.println("hello zhangsan");
 
+    }
+}
+```
+## File
+1、File类和四大家族没有关系，所以File类不能完成文件的读和写。
+2、File对象代表什么？
+文件和目录路径名的抽象表示形式。
+C:\Drivers 这是一个File对象
+C:\Drivers\Lan\Realtek\Readme.txt 也是File对象。
+一个File对象有可能对应的是目录，也可能是文件。
+File只是一个路径名的抽象表示形式。
+3、需要掌握File类中常用的方法
+```java
+public class FileTest01 {
+    public static void main(String[] args) throws Exception {
+        // 创建一个File对象
+        File f1 = new File("D:\\file");
+
+        // 判断是否存在！
+        System.out.println(f1.exists());
+
+        // 如果D:\file不存在，则以文件的形式创建出来
+        /*if(!f1.exists()) {
+            // 以文件形式新建
+            f1.createNewFile();
+        }*/
+
+        // 如果D:\file不存在，则以目录的形式创建出来
+        /*if(!f1.exists()) {
+            // 以目录的形式新建。
+            f1.mkdir();
+        }*/
+
+        // 可以创建多重目录吗？
+        File f2 = new File("D:/a/b/c/d/e/f");
+        /*if(!f2.exists()) {
+            // 多重目录的形式新建。
+            f2.mkdirs();
+        }*/
+
+        File f3 = new File("D:\\course\\01-开课\\学习方法.txt");
+        // 获取文件的父路径
+        String parentPath = f3.getParent();
+        System.out.println(parentPath); //D:\course\01-开课
+        File parentFile = f3.getParentFile();
+        System.out.println("获取绝对路径：" + parentFile.getAbsolutePath());
+
+        File f4 = new File("copy");
+        System.out.println("绝对路径：" + f4.getAbsolutePath()); // C:\Users\Administrator\IdeaProjects\javase\copy
+
+    }
+}
+```
+```java
+public class FileTest02 {
+    public static void main(String[] args) {
+
+        File f1 = new File("D:\\course\\01-开课\\开学典礼.ppt");
+        // 获取文件名
+        System.out.println("文件名：" + f1.getName());
+
+        // 判断是否是一个目录
+        System.out.println(f1.isDirectory()); // false
+
+        // 判断是否是一个文件
+        System.out.println(f1.isFile()); // true
+
+        // 获取文件最后一次修改时间
+        long haoMiao = f1.lastModified(); // 这个毫秒是从1970年到现在的总毫秒数。
+        // 将总毫秒数转换成日期?????
+        Date time = new Date(haoMiao);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS");
+        String strTime = sdf.format(time);
+        System.out.println(strTime);
+
+        // 获取文件大小
+        System.out.println(f1.length()); //216064字节。
+    }
+}
+```
+```java
+public class FileTest03 {
+    public static void main(String[] args) {
+        // File[] listFiles()
+        // 获取当前目录下所有的子文件。
+        File f = new File("D:\\course\\01-开课");
+        File[] files = f.listFiles();
+        // foreach
+        for(File file : files){
+            //System.out.println(file.getAbsolutePath());
+            System.out.println(file.getName());
+        }
     }
 }
 ```
