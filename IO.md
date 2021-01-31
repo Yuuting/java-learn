@@ -96,3 +96,66 @@ java.io.Flushable接口，都是可刷新的，都有flush()方法。养成一�
 	对象专属流：
 		java.io.ObjectInputStream（掌握）
 		java.io.ObjectOutputStream（掌握）
+## java.io.FileInputStream
+
+1、文件字节输入流，万能的，任何类型的文件都可以采用这个流来读。
+
+2、字节的方式，完成输入的操作，完成读的操作（硬盘---> 内存）
+
+```java
+package com.yuting.javase.IO;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class InputStreamTest01 {
+    public static void main(String[] args) {
+        FileInputStream fileInputStream=null;
+        try {
+            fileInputStream=new FileInputStream("C:\\Users\\fengyuting\\Desktop\\003-JavaSE课堂源码\\javase\\chapter23\\src\\com\\bjpowernode\\java\\io\\tempfile4");
+            /*读单个字符
+            int readData=0;
+            while ((readData=fileInputStream.read())!=-1){
+                System.out.println(readData);
+            }
+            */
+            //读整个文件内容
+            byte[] bytes=new byte[4];
+            int readCount = 0;
+            while ((readCount=fileInputStream.read(bytes))!=-1){
+                System.out.print(new String(bytes,0,readCount));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (fileInputStream!=null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+
+```
+3、FileInputStream类的其它常用方法：
+
+int available()：返回流当中剩余的没有读到的字节数量
+
+long skip(long n)：跳过几个字节不读。
+```java
+byte[] bytes = new byte[fis.available()]; // 这种方式不太适合太大的文件，因为byte[]数组不能太大。
+// 不需要循环了。
+// 直接读一次就行了。
+int readCount = fis.read(bytes); // 6
+System.out.println(new String(bytes)); // abcdef
+
+// skip跳过几个字节不读取，这个方法也可能以后会用！
+fis.skip(3);
+System.out.println(fis.read());
+```
