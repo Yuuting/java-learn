@@ -159,3 +159,202 @@ System.out.println(new String(bytes)); // abcdef
 fis.skip(3);
 System.out.println(fis.read());
 ```
+## java.io.FileOutputStream
+
+1、 文件字节输出流，负责写。从内存到硬盘。
+```java
+package com.bjpowernode.java.io;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+/**
+ * 文件字节输出流，负责写。
+ * 从内存到硬盘。
+ */
+public class FileOutputStreamTest01 {
+    public static void main(String[] args) {
+        FileOutputStream fos = null;
+        try {
+            // myfile文件不存在的时候会自动新建！
+            // 这种方式谨慎使用，这种方式会先将原文件清空，然后重新写入。
+            //fos = new FileOutputStream("myfile");
+            //fos = new FileOutputStream("chapter23/src/tempfile3");
+
+            // 以追加的方式在文件末尾写入。不会清空原文件内容。
+            fos = new FileOutputStream("chapter23/src/tempfile3", true);
+            // 开始写。
+            byte[] bytes = {97, 98, 99, 100};
+            // 将byte数组全部写出！
+            fos.write(bytes); // abcd
+            // 将byte数组的一部分写出！
+            fos.write(bytes, 0, 2); // 再写出ab
+
+            // 字符串
+            String s = "我是一个中国人，我骄傲！！！";
+            // 将字符串转换成byte数组。
+            byte[] bs = s.getBytes();
+            // 写
+            fos.write(bs);
+
+            // 写完之后，最后一定要刷新
+            fos.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+
+```
+2、文件复制
+```java
+package com.bjpowernode.java.io;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+/*
+使用FileInputStream + FileOutputStream完成文件的拷贝。
+拷贝的过程应该是一边读，一边写。
+使用以上的字节流拷贝文件的时候，文件类型随意，万能的。什么样的文件都能拷贝。
+ */
+public class Copy01 {
+    public static void main(String[] args) {
+        FileInputStream fis = null;
+        FileOutputStream fos = null;
+        try {
+            // 创建一个输入流对象
+            fis = new FileInputStream("D:\\course\\02-JavaSE\\video\\chapter01\\动力节点-JavaSE-杜聚宾-001-文件扩展名的显示.avi");
+            // 创建一个输出流对象
+            fos = new FileOutputStream("C:\\动力节点-JavaSE-杜聚宾-001-文件扩展名的显示.avi");
+
+            // 最核心的：一边读，一边写
+            byte[] bytes = new byte[1024 * 1024]; // 1MB（一次最多拷贝1MB。）
+            int readCount = 0;
+            while((readCount = fis.read(bytes)) != -1) {
+                fos.write(bytes, 0, readCount);
+            }
+
+            // 刷新，输出流最后要刷新
+            fos.flush();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 分开try，不要一起try。
+            // 一起try的时候，其中一个出现异常，可能会影响到另一个流的关闭。
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+## FileReader
+文件字符输入流，只能读取普通文本。读取文本内容时，比较方便，快捷。将bytes数组换成char数组。
+```java
+char[] chars = new char[4]; // 一次读取4个字符
+int readCount = 0;
+while((readCount = reader.read(chars)) != -1) {
+System.out.print(new String(chars,0,readCount));
+}
+```
+## FileWriter
+文件字符输出流。写。只能输出普通文本。既能写入char数组又能直接写入string数组。
+```java
+char[] chars = {'我','是','中','国','人'};
+out.write(chars);
+out.write(chars, 2, 3);
+
+out.write("我是一名java软件工程师！");
+```
+## BufferedReader
+带有缓冲区的字符输入流。
+使用这个流的时候不需要自定义char数组，或者说不需要自定义byte数组。自带缓冲。
+```java
+public class BufferedReaderTest01 {
+    public static void main(String[] args) throws Exception{
+
+        FileReader reader = new FileReader("Copy02.java");
+        // 当一个流的构造方法中需要一个流的时候，这个被传进来的流叫做：节点流。
+        // 外部负责包装的这个流，叫做：包装流，还有一个名字叫做：处理流。
+        // 像当前这个程序来说：FileReader就是一个节点流。BufferedReader就是包装流/处理流。
+        BufferedReader br = new BufferedReader(reader);
+
+        // 读一行
+        /*String firstLine = br.readLine();
+        System.out.println(firstLine);
+
+        String secondLine = br.readLine();
+        System.out.println(secondLine);
+
+        String line3 = br.readLine();
+        System.out.println(line3);*/
+
+        // br.readLine()方法读取一个文本行，但不带换行符。
+        String s = null;
+        while((s = br.readLine()) != null){
+            System.out.print(s);
+        }
+
+        // 关闭流
+        // 对于包装流来说，只需要关闭最外层流就行，里面的节点流会自动关闭。（可以看源代码。）
+        br.close();
+    }
+}
+
+```
+```java
+//字节流转换为字符流
+/*// 字节流
+        FileInputStream in = new FileInputStream("Copy02.java");
+
+        // 通过转换流转换（InputStreamReader将字节流转换成字符流。）
+        // in是节点流。reader是包装流。
+        InputStreamReader reader = new InputStreamReader(in);
+
+        // 这个构造方法只能传一个字符流。不能传字节流。
+        // reader是节点流。br是包装流。
+        BufferedReader br = new BufferedReader(reader);*/
+
+        // 合并
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("Copy02.java")));
+```
+## BufferedWriter
+直接write()就行。
+```java
+BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("copy", true)));
+        // 开始写。
+        out.write("hello world!");
+        out.write("\n");
+        out.write("hello kitty!");
+        // 刷新
+        out.flush();
+        // 关闭最外层
+        out.close();
+```
