@@ -358,3 +358,65 @@ BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStr
         // 关闭最外层
         out.close();
 ```
+## DataInputStream
+DataInputStream:数据字节输入流。
+## DataOutputStream
+DataOutputStream写的文件，只能使用DataInputStream去读。并且读的时候你需要提前知道写入的顺序。读的顺序需要和写的顺序一致。才可以正常取出数据。
+```java
+public class DataOutputStreamTest {
+    public static void main(String[] args) throws Exception{
+        // 创建数据专属的字节输出流
+        DataOutputStream dos = new DataOutputStream(new FileOutputStream("data"));
+        // 写数据
+        byte b = 100;
+        short s = 200;
+        int i = 300;
+        long l = 400L;
+        float f = 3.0F;
+        double d = 3.14;
+        boolean sex = false;
+        char c = 'a';
+        // 写
+        dos.writeByte(b); // 把数据以及数据的类型一并写入到文件当中。
+        dos.writeShort(s);
+        dos.writeInt(i);
+        dos.writeLong(l);
+        dos.writeFloat(f);
+        dos.writeDouble(d);
+        dos.writeBoolean(sex);
+        dos.writeChar(c);
+
+        // 刷新
+        dos.flush();
+        // 关闭最外层
+        dos.close();
+    }
+}
+```
+```java
+public class DataInputStreamTest01 {
+    public static void main(String[] args) throws Exception{
+        DataInputStream dis = new DataInputStream(new FileInputStream("data"));
+        // 开始读
+        byte b = dis.readByte();
+        short s = dis.readShort();
+        int i = dis.readInt();
+        long l = dis.readLong();
+        float f = dis.readFloat();
+        double d = dis.readDouble();
+        boolean sex = dis.readBoolean();
+        char c = dis.readChar();
+
+        System.out.println(b);
+        System.out.println(s);
+        System.out.println(i + 1000);
+        System.out.println(l);
+        System.out.println(f);
+        System.out.println(d);
+        System.out.println(sex);
+        System.out.println(c);
+
+        dis.close();
+    }
+}
+```
