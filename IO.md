@@ -12,7 +12,7 @@
   - [File](#File)
   - [ObjectInputStream](#ObjectInputStream)
   - [ObjectOutputStream](#ObjectOutputStream)
-  - [IO+Properties的联合应用](#IO+Properties的联合应用)
+  - [IO与Properties的联合应用](#IO与Properties的联合应用)
    
 # IO
 1、IO流，什么是IO？
@@ -822,7 +822,7 @@ public class User implements Serializable {
     }
 }
 ```
-## IO+Properties的联合应用
+## IO与Properties的联合应用
 以后经常改变的数据，可以单独写到一个文件中，使用程序动态读取。将来只需要修改这个文件的内容，java代码不需要改动，不需要重新编译，服务器也不需要重启。就可以拿到动态的信息。
 
 类似于以上机制的这种文件被称为配置文件。并且当配置文件中的内容格式是：key1=value,key2=value的时候，我们把这种配置文件叫做属性配置文件。
