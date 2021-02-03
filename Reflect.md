@@ -168,3 +168,52 @@ String s = "abc";
 注意：应用类加载器专门加载：classpath中的类。
 
 2.4、java中为了保证类加载的安全，使用了双亲委派机制。优先从启动类加载器中加载，这个称为“父”.“父”无法加载到，再从扩展类加载器中加载，这个称为“母”。双亲委派。如果都加载不到，才会考虑从应用类加载器中加载。直到加载到为止。
+
+3、反射Student类当中所有的Field
+```java
+public class ReflectTest05 {
+    public static void main(String[] args) throws Exception{
+
+        // 获取整个类
+        Class studentClass = Class.forName("com.bjpowernode.java.bean.Student");
+
+        //com.bjpowernode.java.bean.Student
+        String className = studentClass.getName();
+        System.out.println("完整类名：" + className);
+
+        String simpleName = studentClass.getSimpleName();
+        System.out.println("简类名：" + simpleName);
+
+        // 获取类中所有的public修饰的Field
+        Field[] fields = studentClass.getFields();
+        System.out.println(fields.length); // 测试数组中只有1个元素
+        // 取出这个Field
+        Field f = fields[0];
+        // 取出这个Field它的名字
+        String fieldName = f.getName();
+        System.out.println(fieldName);
+
+        // 获取所有的Field
+        Field[] fs = studentClass.getDeclaredFields();
+        System.out.println(fs.length); // 4
+
+        System.out.println("==================================");
+        // 遍历
+        for(Field field : fs){
+            // 获取属性的修饰符列表
+            int i = field.getModifiers(); // 返回的修饰符是一个数字，每个数字是修饰符的代号！！！
+            System.out.println(i);
+            // 可以将这个“代号”数字转换成“字符串”吗？
+            String modifierString = Modifier.toString(i);
+            System.out.println(modifierString);
+            // 获取属性的类型
+            Class fieldType = field.getType();
+            //String fName = fieldType.getName();
+            String fName = fieldType.getSimpleName();
+            System.out.println(fName);
+            // 获取属性的名字
+            System.out.println(field.getName());
+        }
+    }
+}
+```
