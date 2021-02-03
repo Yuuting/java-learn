@@ -217,3 +217,50 @@ public class ReflectTest05 {
     }
 }
 ```
+4、通过反射机制，反编译一个类的属性Field
+```java
+
+public class ReflectTest06 {
+    public static void main(String[] args) throws Exception{
+
+        // 创建这个是为了拼接字符串。
+        StringBuilder s = new StringBuilder();
+
+        Class studentClass = Class.forName("java.lang.Thread");
+
+        s.append(Modifier.toString(studentClass.getModifiers()) + " class " + studentClass.getSimpleName() + " {\n");
+
+        Field[] fields = studentClass.getDeclaredFields();
+        for(Field field : fields){
+            s.append("\t");
+            s.append(Modifier.toString(field.getModifiers()));
+            s.append(" ");
+            s.append(field.getType().getSimpleName());
+            s.append(" ");
+            s.append(field.getName());
+            s.append(";\n");
+        }
+
+        s.append("}");
+        System.out.println(s);
+
+    }
+}
+```
+
+5、必须掌握：怎么通过反射机制访问一个java对象的属性？
+
+给属性赋值set、获取属性的值get
+```java
+public class ReflectTest04 {
+    public static void main(String[] args) throws Exception {
+        Class c=Class.forName("com.yuting.javase.reflect.Student");
+        Object o=c.newInstance();
+        Field field=c.getDeclaredField("no");
+        field.setAccessible(true);
+        field.set(o,222);
+        System.out.println(field.get(o));
+
+    }
+}
+```
