@@ -264,3 +264,202 @@ public class ReflectTest04 {
     }
 }
 ```
+6、反射Method、反编译Method
+```java
+public class ReflectTest08 {
+    public static void main(String[] args) throws Exception{
+
+        // 获取类了
+        Class userServiceClass = Class.forName("com.bjpowernode.java.service.UserService");
+
+        // 获取所有的Method（包括私有的！）
+        Method[] methods = userServiceClass.getDeclaredMethods();
+        //System.out.println(methods.length); // 2
+
+        // 遍历Method
+        for(Method method : methods){
+            // 获取修饰符列表
+            System.out.println(Modifier.toString(method.getModifiers()));
+            // 获取方法的返回值类型
+            System.out.println(method.getReturnType().getSimpleName());
+            // 获取方法名
+            System.out.println(method.getName());
+            // 方法的修饰符列表（一个方法的参数可能会有多个。）
+            Class[] parameterTypes = method.getParameterTypes();
+            for(Class parameterType : parameterTypes){
+                System.out.println(parameterType.getSimpleName());
+            }
+        }
+    }
+}
+```
+```java
+public class ReflectTest09 {
+    public static void main(String[] args) throws Exception{
+        StringBuilder s = new StringBuilder();
+        //Class userServiceClass = Class.forName("com.bjpowernode.java.service.UserService");
+        Class userServiceClass = Class.forName("java.lang.String");
+        s.append(Modifier.toString(userServiceClass.getModifiers()) + " class "+userServiceClass.getSimpleName()+" {\n");
+
+        Method[] methods = userServiceClass.getDeclaredMethods();
+        for(Method method : methods){
+            //public boolean login(String name,String password){}
+            s.append("\t");
+            s.append(Modifier.toString(method.getModifiers()));
+            s.append(" ");
+            s.append(method.getReturnType().getSimpleName());
+            s.append(" ");
+            s.append(method.getName());
+            s.append("(");
+            // 参数列表
+            Class[] parameterTypes = method.getParameterTypes();
+            for(Class parameterType : parameterTypes){
+                s.append(parameterType.getSimpleName());
+                s.append(",");
+            }
+            // 删除指定下标位置上的字符
+            s.deleteCharAt(s.length() - 1);
+            s.append("){}\n");
+        }
+
+        s.append("}");
+        System.out.println(s);
+    }
+}
+```
+7、重点：必须掌握，通过反射机制怎么调用一个对象的方法？
+
+五颗星*****
+
+反射机制，让代码很具有通用性，可变化的内容都是写到配置文件当中，
+
+将来修改配置文件之后，创建的对象不一样了，调用的方法也不同了，
+
+但是java代码不需要做任何改动。这就是反射机制的魅力。
+```java
+public class ReflectTest10 {
+    public static void main(String[] args) throws Exception{
+        // 不使用反射机制，怎么调用方法
+        // 创建对象
+        UserService userService = new UserService();
+        // 调用方法
+        /*
+        要素分析：
+            要素1：对象userService
+            要素2：login方法名
+            要素3：实参列表
+            要素4：返回值
+         */
+        boolean loginSuccess = userService.login("admin","123");
+        //System.out.println(loginSuccess);
+        System.out.println(loginSuccess ? "登录成功" : "登录失败");
+
+        // 使用反射机制来调用一个对象的方法该怎么做？
+        Class userServiceClass = Class.forName("com.bjpowernode.java.service.UserService");
+        // 创建对象
+        Object obj = userServiceClass.newInstance();
+        // 获取Method
+        Method loginMethod = userServiceClass.getDeclaredMethod("login", String.class, String.class);
+        //Method loginMethod = userServiceClass.getDeclaredMethod("login", int.class);
+        // 调用方法
+        // 调用方法有几个要素？ 也需要4要素。
+        // 反射机制中最最最最最重要的一个方法，必须记住。
+        /*
+        四要素：
+        loginMethod方法
+        obj对象
+        "admin","123" 实参
+        retValue 返回值
+         */
+        Object retValue = loginMethod.invoke(obj, "admin","123123");
+        System.out.println(retValue);
+    }
+}
+```
+8、反编译一个类的Constructor构造方法
+```java
+public class ReflectTest11 {
+    public static void main(String[] args) throws Exception{
+        StringBuilder s = new StringBuilder();
+        Class vipClass = Class.forName("java.lang.String");
+        s.append(Modifier.toString(vipClass.getModifiers()));
+        s.append(" class ");
+        s.append(vipClass.getSimpleName());
+        s.append("{\n");
+
+        // 拼接构造方法
+        Constructor[] constructors = vipClass.getDeclaredConstructors();
+        for(Constructor constructor : constructors){
+            //public Vip(int no, String name, String birth, boolean sex) {
+            s.append("\t");
+            s.append(Modifier.toString(constructor.getModifiers()));
+            s.append(" ");
+            s.append(vipClass.getSimpleName());
+            s.append("(");
+            // 拼接参数
+            Class[] parameterTypes = constructor.getParameterTypes();
+            for(Class parameterType : parameterTypes){
+                s.append(parameterType.getSimpleName());
+                s.append(",");
+            }
+            // 删除最后下标位置上的字符
+            if(parameterTypes.length > 0){
+                s.deleteCharAt(s.length() - 1);
+            }
+            s.append("){}\n");
+        }
+
+        s.append("}");
+        System.out.println(s);
+    }
+}
+```
+
+9、通过反射机制调用构造方法实例化java对象。（这个不是重点）
+```java
+public class ReflectTest12 {
+    public static void main(String[] args) throws Exception{
+        // 不使用反射机制怎么创建对象
+        Vip v1 = new Vip();
+        Vip v2 = new Vip(110, "zhangsan", "2001-10-11", true);
+
+        // 使用反射机制怎么创建对象呢？
+        Class c = Class.forName("com.bjpowernode.java.bean.Vip");
+        // 调用无参数构造方法
+        Object obj = c.newInstance();
+        System.out.println(obj);
+
+        // 调用有参数的构造方法怎么办？
+        // 第一步：先获取到这个有参数的构造方法
+        Constructor con = c.getDeclaredConstructor(int.class, String.class, String.class,boolean.class);
+        // 第二步：调用构造方法new对象
+        Object newObj = con.newInstance(110, "jackson", "1990-10-11", true);
+        System.out.println(newObj);
+
+        // 获取无参数构造方法
+        Constructor con2 = c.getDeclaredConstructor();
+        Object newObj2 = con2.newInstance();
+        System.out.println(newObj2);
+    }
+}
+```
+10、重点：给你一个类，怎么获取这个类的父类，已经实现了哪些接口？
+```java
+public class ReflectTest13 {
+    public static void main(String[] args) throws Exception{
+
+        // String举例
+        Class stringClass = Class.forName("java.lang.String");
+
+        // 获取String的父类
+        Class superClass = stringClass.getSuperclass();
+        System.out.println(superClass.getName());
+
+        // 获取String类实现的所有接口（一个类可以实现多个接口。）
+        Class[] interfaces = stringClass.getInterfaces();
+        for(Class in : interfaces){
+            System.out.println(in.getName());
+        }
+    }
+}
+```
