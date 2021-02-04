@@ -15,4 +15,5 @@ java学习的一些笔记
 | [IO](https://github.com/Yuuting/java-learn/blob/main/IO.md)         | 1.31     | IO相关        |
 | [线程](https://github.com/Yuuting/java-learn/blob/main/%E7%BA%BF%E7%A8%8B.md)         | 2.1-2.2     | 线程相关        |
 | [反射](https://github.com/Yuuting/java-learn/blob/main/Reflect.md)         | 2.3     | 反射相关        |
-| [注解](https://github.com/Yuuting/java-learn/blob/main/Intonation.md)         | 2.4     | 注解相关        |
+| [注解](https://github.com/Yuuting/java-learn/blob/main/Annotation.md)         | 2.4     | 注解相关        |
+t
